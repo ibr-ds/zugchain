@@ -1,0 +1,17 @@
+session_name: railchain
+before_script: cargo build -p rc-application
+start_directoy: "${PWD}"
+global_options:
+  default-shell: /bin/bash
+environment:
+  RUST_LOG: "debug,rc_bft=debug,rc_bft::requests=trace,rc_application=trace"
+  CONFIG: 'config/localhost/*'
+  ARGS: '--mode tcp --resume-chain 10000'
+windows:
+- window_name: railchain
+  layout: tiled               # run as a first command in all panes
+  panes:
+    - ./target/debug/railchain --config "${CONFIG}" --storage ./runchains/local0 ${ARGS} 0
+    - ./target/debug/railchain --config "${CONFIG}" --storage ./runchains/local1 ${ARGS} 1
+    - ./target/debug/railchain --config "${CONFIG}" --storage ./runchains/local2 ${ARGS} 2
+    - ./target/debug/railchain --config "${CONFIG}" --storage ./runchains/local3 ${ARGS} 3

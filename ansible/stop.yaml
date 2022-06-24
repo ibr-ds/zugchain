@@ -1,0 +1,19 @@
+#!ansible-playbook
+
+---
+- hosts: "{{ h | default('mcoms') }}"
+  remote_user: root
+  gather_facts: false
+  tasks:
+    - import_role:
+        name: stop
+      vars:
+        - process: railchain
+    - import_role:
+        name: stop
+      vars:
+        - process: baseline-client
+    - import_role:
+        name: stop
+      vars:
+        - process: baseline-server

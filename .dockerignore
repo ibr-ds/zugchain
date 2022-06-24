@@ -1,0 +1,10 @@
+**/target
+**/build
+**/keys
+**/config
+**/*.so
+**/*.bin
+benchmarks
+ansible
+runchains
+runchain

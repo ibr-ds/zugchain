@@ -1,0 +1,5 @@
+---
+- name: "compile"
+  shell: "cargo build --target armv7-unknown-linux-gnueabihf --release --bin railchain --bin demo"
+- name: "strip"
+  shell: "arm-linux-gnueabihf-strip ../target/armv7-unknown-linux-gnueabihf/release/railchain ../target/armv7-unknown-linux-gnueabihf/release/demo"

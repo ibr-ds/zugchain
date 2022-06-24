@@ -1,0 +1,19 @@
+# [target.armv7-unknown-linux-gnueabihf]
+# image = "gitlab.ibr.cs.tu-bs.de:4567/ds-railchain/railchain/mcom-build:latest"
+
+# [target.armv7-unknown-linux-gnueabihf]
+# image = "gitlab.ibr.cs.tu-bs.de:4567/ds-railchain/railchain/smartrail-build:latest"
+
+[target."armv7-mcom-linux-gnueabihf.json"]
+image = "gitlab.ibr.cs.tu-bs.de:4567/ds-railchain/railchain/mcom-build:latest"
+xargo = false
+
+[target."armv7-smartrail-linux-gnueabihf.json"]
+image = "gitlab.ibr.cs.tu-bs.de:4567/ds-railchain/railchain/smartrail-build:latest"
+xargo = false
+
+[target.aarch64-unknown-linux-gnu]
+image = "gitlab.ibr.cs.tu-bs.de:4567/ds-railchain/railchain/build-aarch64:latest"
+
+[target.x86_64-unknown-linux-gnu]
+image = "gitlab.ibr.cs.tu-bs.de:4567/ds-railchain/railchain/build:latest"

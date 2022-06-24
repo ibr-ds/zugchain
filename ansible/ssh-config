@@ -1,0 +1,38 @@
+Host railchain-demo
+    HostName osm.futuresoc.de
+    Port 21079
+    User demo
+
+Host rc-sr-01
+    User root
+    HostName 10.200.200.11
+    IdentityFile ~/.ssh/omservice
+    ProxyJump railchain-demo
+    Compression yes
+
+Host rc-sr-02
+    User root
+    HostName 10.200.200.12
+    IdentityFile ~/.ssh/omservice
+    ProxyJump railchain-demo
+    Compression yes
+
+Host rc-sr-03
+    User root
+    HostName 10.200.200.13
+    IdentityFile ~/.ssh/omservice
+    ProxyJump railchain-demo
+    Compression yes
+
+Host rc-sr-04
+    User root
+    HostName 10.200.200.14
+    IdentityFile ~/.ssh/omservice
+    ProxyJump railchain-demo
+    Compression yes
+
+Host rc-db
+    User user
+    HostName 10.200.200.42
+    IdentityFile ~/.ssh/omservice
+    Compression yes

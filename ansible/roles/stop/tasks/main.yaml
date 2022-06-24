@@ -1,0 +1,9 @@
+- name: "Stop {{ process }}"
+  shell:
+    removes: "./{{ process }}.pid"
+    cmd: |
+          pid=$(cat {{ process }}.pid)
+          echo "Killing $pid"
+          kill -s KILL $pid
+          rm {{ process }}.pid
+    chdir: "{{ base_dir }}"

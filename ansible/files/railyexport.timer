@@ -1,0 +1,9 @@
+[Unit]
+Description = Raily Export
+
+[Timer]
+Unit = railyexport.service
+OnCalendar=*-*-* *:*:00,30
+
+[Install]
+WantedBy=timers.target

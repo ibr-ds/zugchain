@@ -1,0 +1,8 @@
+[Unit]
+Description = "Raily Blockchain Recorder"
+
+[Service]
+Type = simple
+WorkingDirectory={{ base_dir }}
+Environment=RUST_LOG=rc_application=debug,rc_bft2=debug,themis_pbft=debug,themis_core=debug,info
+ExecStart = {{ base_dir }}/railchain --mode osf --config '{{ base_dir }}/config/' {{ id }}

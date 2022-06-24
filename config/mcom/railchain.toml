@@ -1,0 +1,13 @@
+[tcn]
+tick_rate = 64
+
+[railchain]
+max_block_messages = 10
+
+[railchain.export]
+exporter_identity = "keys/ed-25519-public-100"
+
+[benchmark]
+# request_limit = 10
+program = "programs/single.ron"
+source_is_me = false

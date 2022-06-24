@@ -1,0 +1,90 @@
+#!ansible-playbook
+---
+- hosts: "{{ h | default('mcoms') }}"
+  tags: upload
+  tasks:
+    - import_role:
+        name: upload-fm2
+
+- hosts: "{{ eh | default('railchain-pi') }}"
+  tags: upload
+  tasks:
+    - synchronize: #rsync instead of copy (MUCH faster)
+        src: "{{ item.src }}"
+        dest: "{{base_dir}}/{{ item.dest }}"
+      loop:
+        - { src: "../target/{{ rust_arch }}/release/export2", dest: "export2"}
+        - { src: "../config/mcom-fm2/", dest: "mcom-fm2/" }
+
+- hosts: localhost
+  tags: generate
+  tasks:
+    - file:
+        path: runchains/tmp/*
+        state: absent
+    - shell:
+        chdir: ".."
+        cmd: |
+              cargo r --bin blockgen -- --blocks {{ num_blocks }} --out runchains/tmp --config 'config/{{ bench_config }}/*'
+
+- hosts: "{{ h | default('mcoms') }}"
+  tags: generate
+  tasks:
+    - file:
+        state: absent
+        path: "{{ base_dir }}/tmpchain"
+      name: "cleaning"
+    - synchronize:
+        src: "../runchains/tmp/"
+        dest: "{{ base_dir }}/tmpchain/"
+      name: "generate blocks"
+
+- hosts: "{{ h | default('mcoms') }}"
+  tags: start
+  tasks:
+    - copy:
+        remote_src: true
+        src: "{{ base_dir }}/tmpchain/"
+        dest: "{{ base_dir }}/runchain/"
+      name: "copy backed up chain"
+    - import_role:
+        name: nohup
+      vars:
+        process: railchain
+        cmdline: "--mode tcp --resume-chain {{ (num_blocks | int) * 10 }} {{ id }}"
+        config: "config-fm2"
+      environment:
+        RUST_LOG: debug
+
+- hosts: "{{ eh | default('railchain-pi') }}"
+  tags: start
+  tasks:
+    - pause:
+        seconds: 2
+    - shell:
+        chdir: "{{ base_dir }}"
+        cmd: |
+              ./export2 --config '{{ bench_config }}/*' --id 100 --base 0 --key keys/ed-25519-private-100 --listen 0.0.0.0:5001 > export.log
+      name: "do export"
+      environment:
+        RUST_LOG: "__measure=trace"
+        # RUST_LOG: "debug"
+    - import_role:
+        name: getlogs
+      vars:
+        log_name: export
+
+- hosts: "{{ h | default('mcoms') }}"
+  gather_facts: false
+  vars:
+    log_name: railchain
+  tasks:
+    - import_role:
+        name: stop
+      vars:
+        - process: railchain
+    # - import_role:
+    #     name: getlogs
+    #   vars:
+    #     log_name: railchain
+  tags: stop

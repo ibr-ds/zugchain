@@ -1,0 +1,57 @@
+#!ansible-playbook
+
+---
+- hosts: "{{ h | default('mcoms') }}"
+  gather_facts: false
+  tags: upload
+  roles:
+    - upload-baseline
+
+- hosts: "{{ h | default('mcoms') }}"
+  remote_user: root
+  gather_facts: false
+  tags: start
+  tasks:
+    - import_role:
+        name: nohup
+      vars:
+        cmdline: "{{ id }} --json-trace"
+        process: baseline-server
+        config: config-baseline
+      environment:
+        RUST_LOG: "__measure=trace"
+    - import_role:
+        name: nohup
+      vars:
+        process: baseline-client
+        config: config-baseline
+        cmdline:  "--id {{ id }} --max-signals {{ max_signals }}"
+      environment:
+        RUST_LOG: info
+
+- hosts: railchain-pi
+  tags: start
+  gather_facts: false
+  tasks:
+    - name: "go"
+      shell:
+        chdir: "{{ base_dir }}"
+        cmd: ./rc-benchcontrol {{ h }}
+
+- hosts: "{{ h | default('mcoms') }}"
+  remote_user: root
+  gather_facts: false
+  vars:
+    log_name: baseline-server
+  tasks:
+    - import_role:
+        name: stop
+      vars:
+        - process: baseline-client
+    - import_role:
+        name: stop
+      vars:
+        - process: baseline-server
+    - import_role:
+        name: getlogs
+  tags: stop

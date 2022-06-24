@@ -1,0 +1,15 @@
+
+- # async: 2 # this needs to be here, otherwise the service immediately dies
+  # poll: 0 # i don't know, if I have to blame ansible or sysvinit
+  vars:
+    private_cmdline: "{{ cmdline | default(id)}}"
+    private_full_command: "nohup ./{{ process }} --config '{{ config }}/' {{ private_cmdline }} >{{ process }}.log </dev/null 2>&1 &"
+  name: "nohup {{ process }} {{ private_cmdline }}"
+  shell:
+    executable: /bin/bash
+    chdir: "{{ base_dir }}"
+    cmd: |
+          {{ private_full_command }}
+          echo $! > {{ process }}.pid
+          sleep 1
+    creates: "./{{ process }}.pid"

@@ -1,0 +1,16 @@
+#!ansible-playbook
+
+---
+- hosts: localhost
+  connection: local
+  tasks:
+    - include_role:
+        name: compile
+
+- hosts: mcoms
+  remote_user: root
+  tasks:
+    - include_role:
+        name: upload
+    - include_role:
+        name: start

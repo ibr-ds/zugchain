@@ -1,0 +1,36 @@
+[build]
+# enable for demo (or use --target), some dependency of plotters hates compiling for i686
+# target = "i686-unknown-linux-gnu"
+
+# [target.x86_64-unknown-linux-gnu]
+# rustflags = [
+#     "-C", "link-arg=-fuse-ld=lld",
+# ]
+
+# [target.armv7-unknown-linux-gnueabihf]
+# linker = "arm-linux-gnueabihf-gcc"
+# rustflags= [
+#     "-C", "target-cpu=cortex-a9",
+#     "-C", "target-feature=+neon"
+# ]
+
+[target.armv7-smartrail-linux-gnueabihf]
+# [target."armv7-smartrail-linux-gnueabihf.json"]
+linker = "arm-linux-gnueabihf-gcc"
+rustflags= [
+    "-C", "target-cpu=cortex-a9",
+    "-C", "target-feature=+neon"
+]
+
+
+[alias]
+buildarm = "build --target armv7-unknown-linux-gnueabihf"
+checkarm = "check --target armv7-unknown-linux-gnueabihf"
+build32 = "build --target i686-unknown-linux-gnu"
+check32 = "check --target i686-unknown-linux-gnu"
+br = "build --release"
+rr = "run --release"
+brr = "build --release --bin railchain"
+
+# [unstable]
+# build-std = ["std"]

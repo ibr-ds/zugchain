@@ -1,0 +1,9 @@
+---
+- name: Download Logs
+  ignore_errors: yes
+  synchronize: #rsync instead of copy (MUCH faster)
+    mode: pull
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - { src: "{{ base_dir}}/{{log_name}}.log", dest: "{{dest_dir}}/{{log_name}}-{{inventory_hostname}}.log" }

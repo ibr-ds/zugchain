@@ -1,0 +1,26 @@
+#!/usr/bin/ansible-playbook
+
+- hosts: raily
+  gather_facts: false
+  tasks:
+    - name: "Dependency"
+      apt:
+        name: rsync
+        state: present
+    - name: "Upload"
+      vars:
+        bench_config: smartrail
+      import_role:
+        name: upload
+    - name: "Upload Service"
+      template:
+        src: raily.j2.service
+        dest: /etc/systemd/system/raily.service
+      notify:
+        - Reload Systemd
+
+  handlers:
+    - name: Reload Systemd
+      systemd:
+        daemon-reload: true
+

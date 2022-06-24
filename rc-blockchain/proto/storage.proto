@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+import "common.proto";
+
+package storage;
+
+// message Base {
+//     common.BlockHeader header = 1;
+//     bytes signature = 2;
+// }
+
+message Head {
+    uint64 number = 1;
+}

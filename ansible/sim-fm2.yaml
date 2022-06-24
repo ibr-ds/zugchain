@@ -1,0 +1,54 @@
+#!ansible-playbook
+
+---
+- hosts: "{{ h | default('mcoms') }}"
+  gather_facts: false
+  tags: upload
+  roles:
+    - upload-fm2
+
+- hosts: railchain-pi
+  tags: upload
+  gather_facts: false
+  tasks:
+    - name: upload controller
+      synchronize:
+        src: "../target/{{ rust_arch }}/release/rc-benchcontrol"
+        dest: "{{ base_dir }}/rc-benchcontrol"
+
+
+- hosts: "{{ h | default('mcoms') }}"
+  gather_facts: false
+  tags: start
+  tasks:
+    - import_role:
+        name: nohup
+      environment:
+        # RUST_LOG: "trace,rc_bft2=trace,themis_pbft=trace,__measure=trace"
+      vars:
+        cmdline: "{{ id }} --json-trace --bench-interval {{ interval }} --bench-payload-size {{ payload_size }} --mode program"
+        process: "railchain"
+        config: "config-fm2"
+        interval: 64
+        payload_size: 1024
+- hosts: railchain-pi
+  tags: start
+  gather_facts: false
+  tasks:
+    - name: "go"
+      shell:
+        chdir: "{{ base_dir }}"
+        cmd: ./rc-benchcontrol {{ h }}
+
+- hosts: "{{ h | default('mcoms') }}"
+  remote_user: root
+  gather_facts: false
+  vars:
+    log_name: railchain
+    process: railchain
+  tasks:
+    - import_role:
+        name: stop
+    - import_role:
+        name: getlogs
+  tags: stop

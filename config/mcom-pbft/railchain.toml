@@ -1,0 +1,8 @@
+[tcn]
+# tick_rate = 64
+
+[railchain]
+max_block_messages = 10
+
+[railchain.export]
+exporter_identity = "keys/ed-25519-public-100"

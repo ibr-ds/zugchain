@@ -1,0 +1,12 @@
+**/target
+**/generated
+**/build/
+**/builds/
+runchain*
+logs/
+ansible/cache/*
+**/__pycache__/*
+/benchmarks
+/workdir
+/victoriametrics
+/blocks

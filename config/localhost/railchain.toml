@@ -1,0 +1,18 @@
+[tcn]
+tick_rate = 64
+
+[railchain]
+max_block_messages = 10
+
+[railchain.export]
+exporter_identity = "keys/ed-25519-public-100"
+
+[benchmark]
+request_limit = 100
+wait_control_port = false
+# exporter_push = "localhost:10900"
+
+[osf]
+port = 12345
+packet_buffer = 1500
+request_buffer = 8192

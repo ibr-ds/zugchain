@@ -1,0 +1,43 @@
+#!ansible-playbook
+
+---
+- hosts: "{{ h | default('mcoms') }}"
+  gather_facts: false
+  tags: upload
+  roles:
+    - upload-fm2
+
+- hosts: "{{ h | default('mcoms') }}"
+  gather_facts: false
+  tags: start
+  tasks:
+    - import_role:
+        name: nohup
+      environment:
+        # RUST_LOG: "debug,themis_pbft=trace"
+      vars:
+        cmdline: "{{ id }} --mode program --pbft-force-in 0 --pbft-force-at {{ offset }} --json-trace"
+        process: railchain
+        config: "config-fm2"
+
+- hosts: railchain-pi
+  tags: start
+  gather_facts: false
+  tasks:
+    - name: "go"
+      shell:
+        chdir: "{{ base_dir }}"
+        cmd: ./rc-benchcontrol {{ h }}
+
+- hosts: "{{ h | default('mcoms') }}"
+  remote_user: root
+  gather_facts: false
+  vars:
+    log_name: railchain
+    process: railchain
+  tasks:
+    - import_role:
+        name: stop
+    - import_role:
+        name: getlogs
+  tags: stop

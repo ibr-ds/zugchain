@@ -1,0 +1,25 @@
+[package]
+name = "rc-cli"
+version = "0.1.0"
+authors = ["Kai Bleeke <k.bleeke@tu-bs.de>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rc-blockchain = {path = "../rc-blockchain"}
+anyhow = "1.0.57"
+prost = "0.10.1"
+toml = "0.5.9"
+serde = { version = "1.0.136", features = ["derive"] }
+plotters = { version = "0.3.1", default-features = false, features = ["svg_backend", "line_series", "point_series"] }
+xshell = "0.1"
+duct = "0.13.5"
+argh = "0.1.7"
+chrono = "0.4.19"
+serde_json = "1.0.79"
+base64 = "0.13.0"
+
+[[bin]]
+name = "cli"
+path = "src/main.rs"

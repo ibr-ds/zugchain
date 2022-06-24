@@ -1,0 +1,40 @@
+#!ansible-playbook
+
+---
+- hosts: mcoms
+  gather_facts: false
+  tasks:
+    - import_role:
+        name: stop
+
+- hosts: localhost
+  gather_facts: false
+  connection: local
+  tasks:
+    - name: "Delete old chain"
+      file:
+        path: "{{ item }}"
+        state: absent
+      loop:
+        - ../runchains/
+    - name: "Create chain dir"
+      file:
+        path: "{{ item }}"
+        state: directory
+      loop:
+        - ../runchains/
+        - ../logs/
+
+- hosts: mcoms
+  gather_facts: false
+  remote_user: root
+  tasks:
+    - name: Download Chain
+      ignore_errors: yes
+      synchronize: #rsync instead of copy (MUCH faster)
+        mode: pull
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+      loop:
+        - { src: "/mnt/ftp/railchain/runchain/", dest: "../runchains/{{ inventory_hostname }}/" }
+        - { src: "/mnt/ftp/railchain/railchain.log", dest: "../logs/{{ inventory_hostname }}.log" }

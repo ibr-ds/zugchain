@@ -1,0 +1,32 @@
+[package]
+name = "rc-export"
+version = "0.1.0"
+authors = ["Kai Bleeke <bleeke@ibr.cs.tu-bs.de>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+themis-core = { path="../vendor/themis/themis-core" }
+rc-blockchain = { path="../rc-blockchain" }
+rc-victoria = { path = "../rc-victoria", optional = true }
+bytes = "1.1.0"
+tokio = { version = "1.18.0", features = ["macros", "rt", "time", "fs", "io-util"] }
+futures-util = "0.3.21"
+ring = "0.16.20"
+rmp-serde = "1.1.0"
+serde = { version = "1.0.136", features = ["derive"] }
+prost = "0.10.1"
+ring-compat = "0.4.1"
+itertools = "0.10.3"
+anyhow = "1.0.57"
+argh = "0.1.7"
+tracing = "0.1.34"
+tracing-subscriber = { version = "0.3.11", features = ["env-filter"] }
+tracing-futures = "0.2.5"
+tokio-stream = "0.1.8"
+
+[features]
+victoria = ["rc-victoria"]
+
+

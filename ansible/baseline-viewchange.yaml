@@ -1,0 +1,56 @@
+#!ansible-playbook
+
+---
+- hosts: "{{ h | default('mcoms') }}"
+  gather_facts: false
+  tags: upload
+  roles:
+    - upload-baseline
+
+- hosts: "{{ h | default('mcoms') }}"
+  gather_facts: false
+  tags: start
+  tasks:
+    - import_role:
+        name: nohup
+      environment:
+        # RUST_LOG: "debug,themis_pbft=trace"
+      vars:
+        cmdline: "{{ id }} --json-trace --pbft-force-in 0 --pbft-force-at {{ offset }}"
+        process: baseline-server
+        config: "config-baseline"
+    - import_role:
+        name: nohup
+      vars:
+        process: baseline-client
+        interval: 64
+        payload_size: 1024
+        cmdline: "--id {{ id }} sim --interval {{ interval }} --payload-size {{ payload_size }}"
+        config: config-baseline
+      environment:
+        RUST_LOG: debug
+
+- hosts: "{{ h | default('mcoms') }}"
+  gather_facts: false
+  vars:
+    process: baseline-client
+  roles:
+    - stop
+  tags: stop
+  tasks:
+    - name: "Cooldown"
+      pause:
+        seconds: 1
+
+- hosts: "{{ h | default('mcoms') }}"
+  remote_user: root
+  gather_facts: false
+  vars:
+    log_name: baseline-server
+    process: baseline-server
+  tasks:
+    - import_role:
+        name: stop
+    - import_role:
+        name: getlogs
+  tags: stop

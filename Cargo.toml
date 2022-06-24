@@ -1,0 +1,21 @@
+[workspace]
+exclude = ["vendor/"]
+members = [
+    "rc-cli",
+    "rc-blockchain",
+    "rc-application",
+    "rc-broadcaster",
+    "rc-export",
+    "rc-msgdump",
+    "rc-bft2",
+    "rc-benchcontrol",
+    "rc-chaintovictoria",
+    "rc-victoria",
+    "libosf/osf"
+]
+
+[patch.crates-io]
+
+[profile.release]
+lto = "yes"
+

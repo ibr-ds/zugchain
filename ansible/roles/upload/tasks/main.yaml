@@ -1,0 +1,18 @@
+---
+- name: Create directories
+  file:
+    path: "{{ base_dir }}/{{ item }}"
+    state: directory
+  loop:
+    - "config"
+    - "keys"
+
+- name: Upload Files
+  synchronize: #rsync instead of copy (MUCH faster)
+    src: "{{ item.src }}"
+    dest: "{{base_dir}}/{{ item.dest }}"
+  loop:
+    - { src: "../target/{{ rust_arch }}/release/railchain", dest: "railchain" }
+    - { src: "../keys/", dest: "keys/" }
+    - { src: "../config/{{bench_config}}/", dest: "config/" }
+    - { src: "BC_TEILN.bin", dest: "BC_TEILN.bin" }

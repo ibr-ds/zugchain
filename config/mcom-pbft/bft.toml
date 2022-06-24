@@ -1,0 +1,10 @@
+[pbft]
+faults = 1
+first_primary = 0
+checkpoint_interval = 10
+high_mark_delta = 5000
+request_timeout = 9999999
+keep_checkpoints = 20
+primary_forwarding = 'Full'
+backup_forwarding = 'Full'
+reply_mode = 'All'

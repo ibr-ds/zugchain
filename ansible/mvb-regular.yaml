@@ -1,0 +1,31 @@
+#!ansible-playbook
+
+---
+- hosts 
+
+- hosts: "{{ h | default('mcoms') }}"
+  remote_user: root
+  gather_facts: false
+  tags: start
+  environment:
+    RUST_LOG: "__measure=trace"
+  vars:
+    cmdline: "--json-trace {{ id }}"
+    process: railchain
+    config: config
+  roles:
+    - nohup
+
+- hosts: "{{ h | default('mcoms') }}"
+  remote_user: root
+  gather_facts: false
+  vars:
+    log_name: railchain
+  tasks:
+    - import_role:
+        name: stop
+      vars:
+        process: railchain
+    - import_role:
+        name: getlogs
+  tags: stop

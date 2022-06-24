@@ -1,0 +1,17 @@
+---
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{base_dir}}config-fm2"
+    - "{{base_dir}}programs"
+
+- name: Upload Files
+  synchronize: #rsync instead of copy (MUCH faster)
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - { src: "../target/{{ rust_arch }}/release/railchain", dest: "{{base_dir}}/railchain" }
+    - { src: "../config/{{ bench_config }}/", dest: "{{ base_dir }}config-fm2" }
+    - { src: "../rc-broadcaster/programs/", dest: "{{ base_dir }}programs" }

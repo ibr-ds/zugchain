@@ -1,0 +1,11 @@
+#!ansible-playbook
+
+---
+- hosts: mcoms
+  remote_user: root
+  gather_facts: false
+  vars:
+    role: start
+  tasks:
+    - include_role:
+        name: "{{role}}"

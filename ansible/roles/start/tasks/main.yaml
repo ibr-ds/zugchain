@@ -1,0 +1,10 @@
+
+- name: "Start {{script}}"
+  # async: 2 # this needs to be here, otherwise the service immediately dies
+  # poll: 0 # i don't know, if I have to blame ansible or sysvinit
+  environment:
+    RUST_LOG: measure=trace
+    # RUST_LOG: "error"
+  shell:
+    chdir: "/mnt/ftp/railchain"
+    cmd: "{{script}} {{ id }}"

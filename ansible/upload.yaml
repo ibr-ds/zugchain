@@ -1,0 +1,13 @@
+#!ansible-playbook
+
+---
+- hosts: "{{ h | default('raily') }}"
+  remote_user: root
+  gather_facts: false
+  tasks:
+    - name: rsync
+      apt:
+        name: rsync
+        state: present
+    - include_role:
+        name: upload

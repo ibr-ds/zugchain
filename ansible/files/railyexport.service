@@ -1,0 +1,13 @@
+[Unit]
+Description = Raily Export
+
+[Service]
+Type = oneshot
+WorkingDirectory = /home/user/railchain/export/
+Environment=RUST_LOG="info,export=warn,sqlx=warn"
+# ExecStart = /home/user/railchain/export/export2 --config config/ --id 100 --base 0 --key keys/ed-25519-private-100 --postgres 'postgres://localhost/railchain?user=railchain&password=demo-vt605' --output blocks
+ExecStart = /home/user/railchain/export/export2 --base 0 --key keys/ed-25519-private-100 --config config/config.toml --vic-addr http://localhost:8428 --vic-header channels.xml --id 100
+
+
+[Install]
+WantedBy = multi-user.target

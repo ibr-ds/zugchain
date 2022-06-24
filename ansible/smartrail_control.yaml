@@ -1,0 +1,21 @@
+#!/usr/bin/ansible-playbook
+
+- hosts: raily
+  gather_facts: false
+  tags:
+    - start
+  tasks:
+    - name: "Start"
+      systemd:
+        name: raily.service
+        state: restarted
+
+- hosts: raily
+  gather_facts: false
+  tags:
+    - stop
+  tasks:
+    - name: "Stop"
+      systemd:
+        name: raily.service
+        state: stopped

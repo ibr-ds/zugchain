@@ -1,0 +1,37 @@
+{
+    "C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
+    // "rust-analyzer.checkOnSave.enable": false,
+    "cmake.configureOnOpen": false,
+    // "rust-analyzer.cargo.target": "i686-unknown-linux-gnu",
+    "cmake.configureEnvironment": {
+        "CXXFLAGS": "-m32",
+    },
+    "cmake.configureArgs": [
+        "-DOS_LINUX=1",
+        "-DUSE_MVBLIB=1"
+    ],
+    "rust-analyzer.cargo.runBuildScripts": true,
+    "rust-analyzer.cargo.allFeatures": true,
+    "rust-analyzer.checkOnSave.command": "clippy",
+    "rust-analyzer.procMacro.enable": true,
+    "rust-analyzer.diagnostics.disabled": [
+        "macro-error"
+    ],
+    "editor.fontSize": 13,
+    "python.linting.flake8Enabled": false,
+    "python.linting.pylintEnabled": true,
+    "python.linting.banditEnabled": false,
+    "python.linting.enabled": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "askForPassword": true,
+            "driver": "PostgreSQL",
+            "name": "localhost",
+            "username": "postgres",
+            "database": "postgres"
+        }
+    ],
+}

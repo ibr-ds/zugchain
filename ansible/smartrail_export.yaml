@@ -1,0 +1,28 @@
+- hosts: "export"
+  tags: upload
+  gather_facts: false
+  tasks:
+    - name: "Install Timer"
+      become: yes
+      become_method: sudo
+      become_user: root
+      copy:
+        src: "{{ item }}"
+        dest: "/etc/systemd/system/"
+      loop:
+        - railyexport.service
+        - railyexport.timer
+    - copy:
+        src: "{{ item.src }}"
+        dest: "{{ base_dir }}/{{ item.dest }}"
+      loop:
+        - { src: "../config/smartrail-export/", dest: "config" }
+        - { src: "../keys/", dest: "keys" }
+        # - { src: "../rc-chaintodb/migrations", dest: "."}
+        - { src: "channels.xml", dest: "channels.xml"}
+    - copy:
+        src: "{{ item.src }}"
+        dest: "{{ base_dir }}/{{ item.dest }}"
+        mode: 0775
+      loop:
+        - { src: "../target/{{ rust_arch }}/release/export2", dest: "export2"}

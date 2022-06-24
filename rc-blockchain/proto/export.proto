@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+import "common.proto";
+
+package export;
+
+message CurrentCheckpoint {
+    uint64 sequence = 1;
+    repeated bytes messages = 2;
+}
+
+message Blocks {
+    repeated common.Block block = 1;
+    bytes head_signature = 2;
+    Delete base = 3;
+}
+
+message Headers {
+    repeated common.BlockHeader header = 1;
+    bytes head_signature = 2;
+    Delete base = 3;
+}
+
+message CheckpointProof {
+    CurrentCheckpoint quorum = 1;
+    common.BlockHeader head = 2;
+    Delete base = 3;
+}
+
+message CheckpointedBlocks {
+    repeated bytes blocks = 1;
+    CheckpointProof proof = 2;
+}
+
+message BlockVec {
+    repeated common.Block blocks = 1;
+    repeated bytes proof = 2;
+}
+
+message Delete {
+    common.BlockHeader header = 1;
+    bytes signature = 2;
+}
+
+enum ReadOp {
+    READ = 0;
+    V1 = 1;
+    V2 = 2;
+}
+
+message Read {
+    uint64 base = 1;
+    uint64 head = 2;
+    ReadOp version = 3;
+}
+
+message Export {
+    oneof command {
+        Read read = 1;
+        Delete delete = 2;
+    }
+}
+
+message Ok {}
+
+
+message Transaction {
+    enum TxType {
+        UNSPECIFIED = 0;
+        CONFIG = 1;
+        DATA = 2;
+    };
+    bytes payload = 1;
+    TxType tx_type = 2;
+}
+
+message Command {
+    oneof action {
+        Export export = 1;
+        Transaction transaction = 2;
+    }
+}

@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+package mvbproto;
+
+// message Signal {
+//     uint32 name = 1;
+//     oneof value {
+//         bool bit = 3;
+//         int64 byte = 4;
+//         int64 word = 10;
+//         int64 long = 5;
+//         float float = 6;
+//         fixed64 huge = 11;
+//         fixed64 td48 = 12;
+//         fixed64 td64 = 13;
+//         bytes byte_array = 7;
+//         IntArray word_array = 8;
+//         IntArray long_array = 14;
+//     }
+// }
+
+message IntArray {
+    repeated int64 value = 1;
+}
+
+// message SignalList {
+//     repeated Signal signals = 1;
+// }
+
+message Genesis {
+    repeated string signal_names = 1;
+}

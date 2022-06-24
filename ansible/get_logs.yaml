@@ -1,0 +1,22 @@
+#! ansible-playbook
+
+
+---
+- hosts: "{{ h | default('mcoms') }}"
+  gather_facts: false
+  tasks:
+    - import_role:
+        name: stop
+
+- hosts: "{{ h | default('mcoms') }}"
+  gather_facts: false
+  remote_user: root
+  tasks:
+    - name: Download Chain
+      ignore_errors: yes
+      synchronize: #rsync instead of copy (MUCH faster)
+        mode: pull
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+      loop:
+        - { src: "/mnt/ftp/railchain/{{log_name}}.log", dest: "{{dest_dir}}/{{log_name}}-{{inventory_hostname}}.log" }

@@ -1,0 +1,16 @@
+---
+- name: Create directories
+  file:
+    path: "{{ item }}"
+    state: directory
+  loop:
+    - "{{base_dir}}config-baseline"
+
+- name: Upload Files
+  synchronize: #rsync instead of copy (MUCH faster)
+    src: "{{ item.src }}"
+    dest: "{{ item.dest }}"
+  loop:
+    - { src: "../target/{{ rust_arch }}/release/baseline-client", dest: "{{base_dir}}/baseline-client" }
+    - { src: "../target/{{ rust_arch }}/release/baseline-server", dest: "{{base_dir}}/baseline-server" }
+    - { src: "../config/{{ bench_config }}/", dest: "{{ base_dir }}config-baseline" }

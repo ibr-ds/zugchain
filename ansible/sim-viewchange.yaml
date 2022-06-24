@@ -1,0 +1,75 @@
+#!ansible-playbook
+
+---
+- hosts: "{{ h | default('mcoms') }}"
+  gather_facts: false
+  tags: upload
+  roles:
+    - upload
+
+- hosts: railchain-pi
+  gather_facts: false
+  tags: upload
+  vars:
+    - base_dir: /home/pi/railchain
+  roles:
+    - upload-broadcaster
+
+- hosts: "{{ h | default('mcoms') }}"
+  remote_user: root
+  gather_facts: false
+  tags: start
+  environment:
+    # RUST_LOG: "rc_bft=debug"
+  vars:
+    cmdline: "--mode tcp --json-trace {{ id }} --checkpoint-size {{ vc_checkpoint_size }}"
+    process: railchain
+    config: config
+  roles:
+    - nohup
+
+- hosts: railchain-pi
+  remote_user: pi
+  gather_facts: false
+  tags: start
+  vars:
+    process: broadcaster
+    interval: 64
+    payload_size: 1024
+    offset: "{{ 2 * (vc_checkpoint_size | int) - 1 }}"
+    vc_freq: "{{ 4 * (vc_checkpoint_size | int) }}"
+    cmdline: "benchmark --interval {{ interval }} --payload-size {{ payload_size }} view-change --offset {{ offset }} --vc-freq {{ vc_freq }} {{ id }}"
+    config: "{{ bench_config }}"
+  environment:
+    RUST_LOG: debug,rc_broadcaster=trace
+  roles:
+    - nohup
+
+- hosts: railchain-pi
+  remote_user: root
+  gather_facts: false
+  vars:
+    process: broadcaster
+  roles:
+    - stop
+  tags: stop
+  tasks:
+    - name: "Cooldown"
+      pause:
+        seconds: 1
+
+- hosts: "{{ h | default('mcoms') }}"
+  remote_user: root
+  gather_facts: false
+  vars:
+    log_name: railchain
+  tasks:
+    - import_role:
+        name: stop
+      vars:
+        - process: railchain
+    - import_role:
+        name: getlogs
+      vars:
+        log_name: railchain
+  tags: stop

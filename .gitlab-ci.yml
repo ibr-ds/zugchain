@@ -1,0 +1,48 @@
+stages:
+  - tests
+  # - simulate
+  - build
+
+#build the project and run unit tests
+tests:
+  stage: tests
+  image: gitlab.ibr.cs.tu-bs.de:4567/ds-railchain/railchain/build:latest
+  cache:
+    paths:
+      - target/
+  before_script:
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - cargo version
+    - rustc --version
+    - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - git submodule update --init
+  script:
+    - cargo test --workspace
+
+build:
+  stage: build
+  image: gitlab.ibr.cs.tu-bs.de:4567/ds-railchain/railchain/build:latest
+  artifacts:
+    untracked: false
+    expire_in: 30 days
+    paths:
+      - "target/release/rc-msgdump"
+  before_script:
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | tr -d '\r' | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - cargo version
+    - rustc --version
+    - echo "$SSH_KNOWN_HOSTS" >> ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+    - git submodule update --init
+  script:
+    - cargo build --release --bin rc-msgdump
+

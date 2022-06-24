@@ -1,0 +1,11 @@
+[submodule "fabric-protos"]
+	path = vendor/fabric-protos
+	url = https://github.com/hyperledger/fabric-protos/
+	branch = release-2.1
+[submodule "vendor/themis"]
+	path = vendor/themis
+	url = git@github.com:ibr-ds/themis.git
+	branch = dev-railchain
+[submodule "vendor/fabric-protos"]
+	path = vendor/fabric-protos
+	url = https://github.com/hyperledger/fabric-protos/
