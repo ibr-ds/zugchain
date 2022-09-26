@@ -1,4 +1,22 @@
-# railchain
+# ZugChain
+
+## Paper
+
+The paper was presented at DSN 2022 and is available [here](https://www.ibr.cs.tu-bs.de/users/ruesch/papers/ruesch-dsn22.pdf) and [here](https://ieeexplore.ieee.org/abstract/document/9833566).
+
+Please cite us if you use our work in your research:
+```
+@inproceedings{ruesch2022zugchain,
+  author={R\"{u}sch, Signe and Bleeke, Kai and Messadi, Ines and Schmidt, Stefan and Krampf, Andreas and Olze, Katharina and Stahnke, Susanne and Schmid, Robert and Pirl, Lukas and Kittel, Roland and Polze, Andreas and Franz, Marquart and M\"{u}ller, Matthias and Jehl, Leander and Kapitza, R\"{u}diger},
+  booktitle={2022 52nd Annual IEEE/IFIP International Conference on Dependable Systems and Networks (DSN)}, 
+  title={ZugChain: Blockchain-Based Juridical Data Recording in Railway Systems}, 
+  year={2022},
+  volume={},
+  number={},
+  pages={67-78},
+  doi={10.1109/DSN53405.2022.00019}
+}
+```
 
 ## Building and Running
 First steps
